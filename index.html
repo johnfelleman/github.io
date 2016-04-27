@@ -206,17 +206,44 @@
         <div class="panel-body" ng-if="showOptions">
             <ul>
                 <li>Picklist size limit <input type="number"
-                        ng-model="maxPicklistCount"></li>
-                <li>
-                    <ul> Field Settings
-                        <li ng-repeat="field in fields">
-                            <input type="text"
-                                ng-model="fields.friendly"
-                                placeholder="{{field.friendly}}">
-                        </li>
-                    </ul>
-                </li>
-            </ol>
+                        ng-model="$parent.maxPicklistCount"></li>
+                <li>Results per page <input type="number"
+                        ng-model="$parent.maxResultsPerPage"></li>
+            </ul>
+                        <table>
+                            <tr>
+                              <td>Id<br>Name</td>
+                              <td>Req.</td>
+                              <td "colspan=3">Show</td>
+                            </tr>
+                            <tr>
+                              <td></td>
+                              <td></td>
+                              <td>No</td>
+                              <td>Always</td>
+                              <td>Extended</td>
+                            </tr>
+                            <tr ng-repeat="(id,field) in fields">
+                              <td>
+                                {{id}}<br>
+                                <input type="text"
+                                    ng-model="fields.friendly"
+                                    placeholder="{{field.friendly}}">
+                              </td>
+                              <td>
+                                 <input type="checkbox" ng-model="field.required">
+                              </td>
+                              <td>
+                                 <input type="radio" ng-model="field.required" value="N">
+                              </td>
+                              <td>
+                                 <input type="radio" ng-model="field.required" value="A">
+                              </td>
+                              <td>
+                                 <input type="radio" ng-model="field.required" value="E">
+                              </td>
+                            </tr>
+                       </table>
         </div>
 
       </div>
@@ -242,7 +269,8 @@
 
           <ol>
             <li>Dynamically update the various numbers based on selected filters, and automatically suppress choices that are no longer valide.</li>
-            <li>Make the option setting actually work.</li>
+            <li>Connect the field-specific settings</li>
+            <li>Load data from a separate URL</li>
           </ol>
 
         </div>
@@ -257,6 +285,7 @@
       <div>
         <div class="pull-left">
           <h3>Search Results</h3>
+          <p>Showing {{maxResultsPerPage}} of filterResults from totalResults</p>
           <p>Criteria: [criteria list]</p>
         </div>
 
@@ -276,7 +305,7 @@
                    filter: {fields: { estimated_fiscal_year: searchPatterns.estimated_fiscal_year }} |
                    filter: {fields: { place_of_performance_city: searchPatterns.place_of_performance_city }} |
                    filter: {fields: { place_of_performance_state: searchPatterns.place_of_performance_state }} |
-                   limitTo: 100">
+                   limitTo: maxResultsPerPage">
 
 
         <div class="panel shadow"

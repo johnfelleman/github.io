@@ -10,7 +10,7 @@ function createFilterLists(objectArray, indices, depth) {
 
 }
 
-function createFilterLists(objectArray, interiorProperty, picklistsArray, searchStrings) {
+function createFilterLists(objectArray, interiorProperty, picklistsArray) {
     angular.forEach(objectArray, function(item, key, obj) {
         if (item.model === 'opportunities.opportunity') {
             angular.forEach(picklistsArray, function(picklist, idx) {
@@ -39,6 +39,7 @@ function createFilterLists(objectArray, interiorProperty, picklistsArray, search
 opportunityModule.controller('searchController', function ($scope) {
     $scope.opportunityList = opportunities;
     $scope.maxPicklistCount = 20;
+    $scope.maxResultsPerPage = 50;
     $scope.fields = {
         naics: { friendly: 'NAICS Code', entries:[]},
         agency: {friendly: 'Awarding Agency', entries:[]},
@@ -47,7 +48,7 @@ opportunityModule.controller('searchController', function ($scope) {
         place_of_performance_state: { friendly: 'State', entries:[]},
         place_of_performance_city: { friendly: 'City', entries:[]}
     };
-    var picklists = [
+    $scope.picklists = [
         {name: 'naics', friendly: 'NAICS Code', entries:[]},
         {name: 'agency', friendly: 'NAICS Code', entries:[]},
         {name: 'award_status', friendly: 'NAICS Code', entries:[]},
@@ -55,13 +56,12 @@ opportunityModule.controller('searchController', function ($scope) {
         {name: 'place_of_performance_state', friendly: 'NAICS Code', entries:[]},
         {name: 'place_of_performance_city', friendly: 'NAICS Code', entries:[]}
     ];
-    createFilterLists(opportunities, 'fields', picklists);
+    createFilterLists($scope.opportunityList, 'fields', $scope.picklists);
     var searchPatterns = {};
     $scope.searchPatterns = searchPatterns;
 
-    angular.forEach(picklists, function(list) {
+    angular.forEach($scope.picklists, function(list) {
         $scope.searchPatterns[list.name] = '';
     });
-    $scope.picklists = picklists;
 });
 
